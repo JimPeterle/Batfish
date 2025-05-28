@@ -137,3 +137,4 @@ docker run --name batfish -v batfish-data:/data -p 8888:8888 -p 9996:9996 -p 999
 
 
 Now have fun trying out and automating your network.
+Your welcome to clone this Git repo so that the necessary folder structure is already available, only the venv has to be created in the main directory. 
