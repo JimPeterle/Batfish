@@ -48,7 +48,7 @@ python3 -m venv path/to/venv
 Activate the virtual environment:
 
 ```bash
-source venv/bin/activate
+source path/to/venv/bin/activate
 ```
 
 Install the required Python library for the use of Batfish:
