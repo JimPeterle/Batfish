@@ -89,9 +89,7 @@ if __name__ == "__main__":
 
     # Run a question
     r = bf.q.nodeProperties().answer().frame()
-    print(r)
     node = r['Node'][0]
-    print(node)
 
     # Save output to CSV
     if not os.path.exists(output_dir):
