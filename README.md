@@ -1,5 +1,5 @@
 # Batfish  
-Batfish ist ein Netzwerkanalyse-Tool, das sehr nützlich sein kann, um unter anderem Access-Listen zu prüfen oder Konfigurationen zu validieren.
+Batfish is an open source tool for analyzing the network configuration. In addition, you can also check access lists or firewall rules by telling Batfish a source and destination network and it checks the rules based on this information.
 
 ## Installation  
 Zuerst erstellen wir ein Python-virtuelles Environment, wie es bei der Verwendung von Batfish empfohlen wird:
