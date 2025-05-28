@@ -1,26 +1,9 @@
 # Batfish  
 Batfish is an open source tool for analyzing the network configuration. In addition, you can also check access lists or firewall rules by telling Batfish a source and destination network and it checks the rules based on this information.
 
-## Installation  
-Zuerst erstellen wir ein Python-virtuelles Environment, wie es bei der Verwendung von Batfish empfohlen wird:
+## Installation 
 
-```bash
-python3 -m venv path/to/venv
-```
-
-Dann das Docker-Image herunterladen:
-
-```bash
-docker pull batfish/allinone
-```
-
-Das Image starten:
-
-```bash
-docker run --name batfish -v batfish-data:/data -p 8888:8888 -p 9996:9996 -p 9997:9997 batfish/allinone
-```
-
-Es wird empfohlen, folgende Verzeichnisstruktur zu verwenden:
+First it is recommended to use the following directory structure:
 
 ```bash
 ├── Batfish
@@ -37,32 +20,50 @@ Es wird empfohlen, folgende Verzeichnisstruktur zu verwenden:
 │       └── pyvenv.cfg
 ```
 
-Einer der folgenden Ordner muss im Snapshot-Verzeichnis existieren, sonst kann Batfish nicht arbeiten:  
+One of the following folders must exist in the snapshot directory, otherwise Batfish cannot work. Each folder has a different use case:  
 
-- **configs/**: Für die meisten physischen Geräte wie Cisco, Juniper, Arista usw.  
-- **aws_configs/**: Für AWS VPC-Konfigurationen.  
-- **sonic_configs/**: Für SONiC-Geräte.  
-- **hosts/**: Für Host-Modelle mit iptables-Konfigurationen.
+- **configs/**: For most physical devices such as Cisco, Juniper, Arista etc.  
+- **aws_configs/**: For AWS VPC configurations.  
+- **sonic_configs/**: For SONiC-Geräte.  
+- **hosts/**: For host models with iptables configurations.
 
-Das virtuelle Environment aktivieren:
+Next step after building the directory structure, download the Docker image:
+
+```bash
+docker pull batfish/allinone
+```
+
+Then starting the Docker container:
+
+```bash
+docker run --name batfish -v batfish-data:/data -p 8888:8888 -p 9996:9996 -p 9997:9997 batfish/allinone
+```
+
+Create a Python virtual environment, as recommended when using Batfish:
+
+```bash
+python3 -m venv path/to/venv
+```
+
+Activate the virtual environment:
 
 ```bash
 source venv/bin/activate
 ```
 
-Die benötigte Python-Bibliothek installieren:
+Install the required Python library for the use of Batfish:
 
 ```bash
-python3 -m pip install --upgrade pybatfish
+python3 -m pip install pybatfish
 ```
 
-Falls notwendig, setuptools installieren oder aktualisieren:
+If necessary, install setuptools:
 
 ```bash
-python3 -m pip install --upgrade setuptools
+python3 -m pip install setuptools
 ```
 
-Als `main.py` kann folgendes Skript verwendet werden:
+The following script can be used as `main.py`. The question is given here bf.q.<question> this can vary as explained below.:
 
 ```python
 #!/usr/bin/env python3
@@ -88,7 +89,9 @@ if __name__ == "__main__":
 
     # Run a question
     r = bf.q.nodeProperties().answer().frame()
+    print(r)
     node = r['Node'][0]
+    print(node)
 
     # Save output to CSV
     if not os.path.exists(output_dir):
@@ -97,4 +100,40 @@ if __name__ == "__main__":
     r.to_csv(os.path.join(output_dir, f"results_{node}.csv"))
 ```
 
+The script must then be executed in the virtual environment, which means first activating the “venv” and then executing the Python script:
 
+``` Bash
+python3 main.py
+```
+
+After executing the script, a .csv file is created which is then located in the “output” folder.
+
+## Possibilities with the question module
+
+The questions are a way to interact with Batfish so that it can validate the configuration. It is possible to ask Batfish different “questions”, an overview can be found here:
+
+https://batfish.readthedocs.io/en/latest/questions.html
+
+In the menu item “Access-lists and firewall rules” the question “Test Filters” can be found. With this question it is possible to give the Python script a source and destination network with the corresponding ports and Batfish checks the ACL contained in the config for a match, so with longer ACLs it can be checked quickly and easily whether the traffic is allowed or forbidden.
+
+## Keep everything up to date
+
+To keep everything up to date, the following must be done:
+
+```bash
+source venv/bin/activate
+python3 -m pip install --upgrade pybatfish
+python3 -m pip install --upgrade setuptools
+```
+
+To update the docker container the following is necessary: 
+
+```bash
+docker stop batfish
+docker rm batfish
+docker pull batfish/allinone
+docker run --name batfish -v batfish-data:/data -p 8888:8888 -p 9996:9996 -p 9997:9997 batfish/allinone
+```
+
+
+Now have fun trying out and automating your network.
