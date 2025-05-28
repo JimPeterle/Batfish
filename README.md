@@ -63,7 +63,7 @@ If necessary, install setuptools:
 python3 -m pip install setuptools
 ```
 
-The following script can be used as `main.py`. The question is given here bf.q.~question~ this can vary as explained below.:
+The following script can be used as `main.py`. The question is given here bf.q.'question' this can vary as explained below.:
 
 ```python
 #!/usr/bin/env python3
